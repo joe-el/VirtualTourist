@@ -11,7 +11,7 @@ import CoreData
 
 //MARK: Properties
 let reuseIdent = "Cell"
-var hideCell: Bool!
+var hideCell: Bool = false
 
 //MARK: ColectionView Data Source Methods
 
