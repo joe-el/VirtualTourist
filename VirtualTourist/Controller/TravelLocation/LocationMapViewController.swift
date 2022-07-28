@@ -95,8 +95,8 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
           manager.stopUpdatingLocation()
           return
        }
-       // Notify the user of any errors.
-        print("Failed to find user's location: \(error.localizedDescription)")
+        // Notify the user of any errors.
+        self.handleFailureAlert(title: "Location Issue", message: "Failed to find user's location: \(error.localizedDescription)")
     }
 
     //MARK: Helpers—
@@ -158,7 +158,7 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
 
 //MARK: MKMapViewDelegate—
 
-extension LocationMapViewController: MKMapViewDelegate, NSFetchedResultsControllerDelegate {
+extension LocationMapViewController: MKMapViewDelegate {
     
     // Saves last state of the map region when mapViewDidChangeVisibleRegion()—
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
@@ -197,8 +197,6 @@ extension LocationMapViewController: MKMapViewDelegate, NSFetchedResultsControll
                     PhotoAlbumVC.albumView.pinSelected = pinSelected
                     
                     navigationController?.pushViewController(PhotoAlbumVC, animated: true)
-                } else {
-                    print("nada")
                 }
             }
         }

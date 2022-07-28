@@ -34,7 +34,9 @@ class FlickrAPIClient {
         static let jsonCallBack = "&nojsoncallback=1"
         static let safeSearch = "&safe_search=2"
         static let hasGeo = "&has_geo=1"
+        static let radius = "&radius=1"
         static let extras = "&extras=url_m"
+        static let perPage = "&per_page=25"
         
         case testEchoService
         case photosSearch(Double, Double, Int)
@@ -44,7 +46,7 @@ class FlickrAPIClient {
             case .testEchoService:
                 return EndPoints.testEcho
             case .photosSearch(let lat, let long, let pageNumber):
-                return EndPoints.base + EndPoints.method + EndPoints.apiKey + EndPoints.format + EndPoints.jsonCallBack + EndPoints.safeSearch + EndPoints.hasGeo + "&lat=\(lat)&long=\(long)" + EndPoints.extras + "&per_page=10&page=\(pageNumber)"
+                return EndPoints.base + EndPoints.method + EndPoints.apiKey + EndPoints.format + EndPoints.jsonCallBack + EndPoints.safeSearch + EndPoints.hasGeo + "&lat=\(lat)&long=\(long)" + EndPoints.radius + EndPoints.extras + EndPoints.perPage + "&page=\(pageNumber)"
             }
         }
         
@@ -90,8 +92,6 @@ class FlickrAPIClient {
     
     // A helper method to get Flickr Images—
     class func requestFlickrData(lat: Double, long: Double, pageNum: Int, completionHandler: @escaping (FlickrPhotos?, Error?) -> Void) {
-//        let pageNum = getRandomPageNumber(totalPicsAvailable: totalPageAmount, maxNumPicsdisplayed: picsPerPage)
-        
         taskForGETRequest(url: EndPoints.photosSearch(lat, long, pageNum).url, responseType: FlickrPhotos.self) { (response, error) in
             if let response = response {
                 completionHandler(response, nil)
@@ -100,17 +100,6 @@ class FlickrAPIClient {
             }
         }
     }
-    
-//    private func getRandomPageNumber(totalPicsAvailable: Int, maxNumPicsdisplayed: Int) -> Int {
-//        let flickrLimit = 4000
-//        // Available total number of pics or flickr limit
-//        let numberPages = min(totalPicsAvailable, flickrLimit) / maxNumPicsdisplayed
-//        let randomPageNum = Int.random(in: 0...numberPages)
-//        print("totalPicsAvaible is \(totalPicsAvailable), numPage is \(numberPages)",
-//             "randomPageNum is \(randomPageNum)")
-//        
-//        return randomPageNum
-//    }
     
     class func grabPhoto(pin: Pin, urlPath: String, completion: @escaping (Data?, Error?) -> Void) {
         if let image = isPhotoInCache(for: pin, with: urlPath) {
@@ -139,6 +128,24 @@ class FlickrAPIClient {
         }
     }
     
+    private class func isPhotoInCache(for pin: Pin, with id: String) -> Data? {
+        if let pinPhotos = pin.photos?.allObjects as? [Photo], let photoData = pinPhotos.first(where: { $0.id == id })?.photoData {
+            return photoData
+        }
+        
+        return nil
+    }
+    
+    // Marked as a class method, weil we don't need an instance of the FlickrAPI in order to use it—
+    class func requestSinglePhoto(url: String, completionHandler: @escaping (Data?, Error?) -> Void) {
+        if let url = URL(string: url) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                completionHandler(data, error)
+            }
+            task.resume()
+        }
+    }
+    
     private class func savePhotoInCache(for pin: Pin, with id: String, photoData: Data) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
@@ -148,24 +155,6 @@ class FlickrAPIClient {
         newPhoto.pin = pin
         pin.addToPhotos(newPhoto)
         try? context.save()
-    }
-    
-    private class func isPhotoInCache(for pin: Pin, with id: String) -> Data? {
-        if let pinPhotos = pin.photos?.allObjects as? [Photo], let photoData = pinPhotos.first(where: { $0.id == id })?.photoData {
-            return photoData
-        }
-        
-        return nil
-    }
-
-    // Marked as a class method, weil we don't need an instance of the FlickrAPI in order to use it—
-    class func requestSinglePhoto(url: String, completionHandler: @escaping (Data?, Error?) -> Void) {
-        if let url = URL(string: url) {
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                completionHandler(data, error)
-            }
-            task.resume()
-        }
     }
     
 }

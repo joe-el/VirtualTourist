@@ -11,7 +11,7 @@ import CoreData
 
 //MARK: Properties
 let reuseIdent = "Cell"
-var hidePhotoCell: Bool = false
+var hideCell: Bool!
 
 //MARK: ColectionView Data Source Methods
 
@@ -29,25 +29,24 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         }
         
         // if there are no photos to download then hide the cell
-//        if hidePhotoCell {
-//            cell.isHidden = hidePhotoCell
-//            cell.backgroundColor = .clear
-//            cell.alpha = 0
-//            backgroundImage.image = UIImage(named: "NoContent")
-//        }
-        
-        let flickrImageUrl = albumView.photos[indexPath.row]
-        
-        if let urlString = flickrImageUrl.urlString {
-            if let pin = albumView.pinSelected {
-                cell.setPhotoImageView(for: pin, from: urlString)
+        if hideCell {
+            cell.isHidden = true
+            cell.alpha = 0
+            backgroundImage.image = UIImage(named: "NoContent")
+        } else {
+            let flickrImageUrl = albumView.photos[indexPath.row]
+            
+            if let urlString = flickrImageUrl.urlString {
+                if let pin = albumView.pinSelected {
+                    cell.setPhotoImageView(for: pin, from: urlString)
+                }
             }
+            
+            cell.photoImageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
+            cell.photoImageView.layer.borderWidth = 2
+            cell.photoImageView.layer.cornerRadius = 3
+            cell.layer.cornerRadius = 7
         }
-        
-        cell.photoImageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
-        cell.photoImageView.layer.borderWidth = 2
-        cell.photoImageView.layer.cornerRadius = 3
-        cell.layer.cornerRadius = 7
         
         // if we're still here it means we got a AlbumPhotoCell, so we can return it
         return cell
@@ -96,13 +95,15 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
 
 extension PhotoAlbumViewController: PhotoAlbumViewDelegate {
     
-    func showNoImagesFoundView() {
-//        hidePhotoCell = true
-        DispatchQueue.main.async { [self] in
-            collectionView.displayEmptyView()
-//            photoCell.isHidden = true
-//            photoCell.alpha = 0
-//            backgroundImage.image = UIImage(named: "NoContent")
+    func showNoCellView(_ haveNoPhotos: Bool) {
+        if haveNoPhotos == true {
+            hideCell = haveNoPhotos
+            backgroundImage.isHidden = false
+            backgroundImage.alpha = 1
+        } else if haveNoPhotos == false {
+            hideCell = haveNoPhotos
+            backgroundImage.isHidden = true
+            backgroundImage.alpha = 0
         }
     }
     
@@ -126,50 +127,6 @@ extension PhotoAlbumViewController: PhotoAlbumViewDelegate {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
-    }
-    
-}
-
-// MARK: Create No Image Found View
-
-extension UICollectionView {
-    
-    func displayEmptyView() {
-        // if there are no photos to download then hide the cell
-//        hidePhotoCell = true
-        
-        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
-        
-        let imageView = UIImageView(image: UIImage(imageLiteralResourceName: "NoContent"))
-        
-        imageView.backgroundColor = .clear
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        emptyView.addSubview(imageView)
-        
-        imageView.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: -20).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        
-        UIView.animate(withDuration: 1, animations: {
-            
-            imageView.transform = CGAffineTransform(rotationAngle: .pi / 15)
-        }, completion: { (finish) in
-            UIView.animate(withDuration: 1, animations: {
-                imageView.transform = CGAffineTransform(rotationAngle: -1 * (.pi / 15))
-            }, completion: { (finish) in
-                UIView.animate(withDuration: 1, animations: {
-                    imageView.transform = CGAffineTransform.identity
-                })
-            })
-            
-        })
-        self.backgroundView = emptyView
-    }
-    
-    func restore() {
-        self.backgroundView = nil
     }
     
 }

@@ -34,7 +34,8 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Maybe add isHidden and 0 alpha for backgroundImage
+        backgroundImage.isHidden = true
+        backgroundImage.alpha = 0
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -59,7 +60,8 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     func deleteData(index: Int){
-        if let photo = albumView.pinSelected?.photos?.first(where: { ($0 as? Photo)?.id ==  albumView.photos[index].urlString}) as? Photo {
+        // Returns the first element of the sequence that satisfies the given predicate.
+        if let photo = albumView.pinSelected?.photos?.first(where: { ($0 as? Photo)?.id == albumView.photos[index].urlString}) as? Photo {
             albumView.pinSelected?.removeFromPhotos(photo)
             albumView.photos.remove(at: index)
             collectionView.reloadData()

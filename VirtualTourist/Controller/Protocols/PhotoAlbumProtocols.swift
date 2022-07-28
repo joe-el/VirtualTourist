@@ -9,7 +9,7 @@ import MapKit
 import CoreData
 
 protocol PhotoAlbumViewDelegate: AnyObject {
-    func showNoImagesFoundView()
+    func showNoCellView(_ haveNoPhotos: Bool)
     func zoomToVisibleArea(region: MKCoordinateRegion)
     func loadedPin()
     func loadedPhotos()
@@ -30,7 +30,7 @@ extension PhotoAlbumView: PhotoAlbumViewProtocol{
     
     func getMorePhotos(){
         if currentPage <= 100 {
-            currentPage += 1
+            currentPage = Int.random(in: 1..<100)
             downloadPhotoData(currentPage)
             delegate?.loadMorePhotos()
         }
