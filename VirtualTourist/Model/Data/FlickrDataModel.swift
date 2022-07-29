@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 
 class FlickrDataModel {
-    // Storing the array of FlickrData structs:
+    
+    // storing the array of FlickrData structs
     static var flickrData = [FlickrPhotos.Photos.Photo]()
-    static var imageAlbum: [UIImage] = []
+    
 }

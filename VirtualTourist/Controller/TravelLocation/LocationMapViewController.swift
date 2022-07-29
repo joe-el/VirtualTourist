@@ -12,9 +12,8 @@ import CoreLocation
 import CoreData
 
 class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
+    // MARK: Properties
     
-    //MARK: Properties—
-//    let uuid = UUID().uuidString
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let manager = CLLocationManager()
     let locationView = TravelLocationView()
@@ -24,14 +23,15 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
     var lat: Double!
     var long: Double!
     
-    //MARK: Outlets—
+    // MARK: Outlets
     
     @IBOutlet weak var locationMapView: MKMapView!
     
-    //MARK: Life Cycle—
+    // MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         manager.requestAlwaysAuthorization()
         manager.delegate = self
         
@@ -40,28 +40,28 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
         locationView.delegate = self
         locationView.addCachedPins()
     
-        // Retrieve last center coordinate of the mapView—
+        // retrieve last center coordinate of the mapView
         if let savedMapState = UserDefaults.standard.value(forKey: "hasLaunchedBefore") {
             if savedMapState as! Bool {
                 userDefaultMapState()
             } else {
-                // Set the starting coordinates of the map view to the user current location:
+                // set the starting coordinates of the map view to the user current location
                 manager.requestLocation()
             }
         } else {
-            // First time launching app—
+            // first time launching app
             UserDefaults.standard.set(false, forKey: "hasLaunchedBefore")
             manager.requestLocation()
         }
         
-        // Tapping and holding the map drops a new pin. Users can place numerous number of pins on the map.
+        // tapping and holding the map drops a new pin. Users can place numerous number of pins on the map
         longPress.addTarget(self, action: #selector(registeredLongPress(_:)))
         locationMapView.addGestureRecognizer(longPress)
     }
     
-    //MARK: Persistent Map Location—
+    // MARK: Persistent Map Location
     
-    // If the app is turned off, the map should return to the same state when it is turned on again—
+    // if the app is turned off, the map should return to the same state when it is turned on again
     func userDefaultMapState() {
         if let mapRegion = UserDefaults.standard.dictionary(forKey: regionKey) {
             let location = mapRegion as! [String: CLLocationDegrees]
@@ -72,34 +72,34 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    // Receiving location updates using standard location service—
+    // receiving location updates using standard location service
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.first {
-            // Do something with the location.
+            // do something with the location
             lat = lastLocation.coordinate.latitude
             long = lastLocation.coordinate.longitude
             
-            // Set the starting coordinates of the map view to the user current location:
+            // set the starting coordinates of the map view to the user current location
             let initialLocation = CLLocationCoordinate2D(latitude: lat, longitude: long)
             let initialsSpan = MKCoordinateSpan(latitudeDelta: locationMapView.region.span.latitudeDelta, longitudeDelta: locationMapView.region.span.longitudeDelta)
             
-            // Calls the helper method to zoom into usersLocation on startup:
+            // calls the helper method to zoom into usersLocation on startup
             locationView.centerToLocation(location: initialLocation, span: initialsSpan)
         }
     }
     
-    // Handling location-related errors when the location manager is unable to deliver location updates—
+    // handling location-related errors when the location manager is unable to deliver location updates
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
        if let error = error as? CLError, error.code == .denied {
-          // Location updates are not authorized.
+          // location updates are not authorized
           manager.stopUpdatingLocation()
           return
        }
-        // Notify the user of any errors.
+        // notify the user of any errors
         self.handleFailureAlert(title: "Location Issue", message: "Failed to find user's location: \(error.localizedDescription)")
     }
 
-    //MARK: Helpers—
+    // MARK: Helper Methods
     
     func getAnnotations(){
         if !locationView.pinDrops.isEmpty {
@@ -126,22 +126,22 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @objc func registeredLongPress(_ sender: UILongPressGestureRecognizer) {
-        // For not generate multiple pins during long press.
+        // for not generate multiple pins during long press
         if sender.state != UIGestureRecognizer.State.began {
             return
         }
 
-        // Getting the coordinates of where user long pressed.
+        // getting the coordinates of where user long pressed
         let mapView = sender.view as! MKMapView
         let touchPoint = sender.location(in: mapView)
         
-        // Convert location to CLLocationCoordinate2D—
+        // convert location to CLLocationCoordinate2D
         let mapCoordinate: CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
-        // Pin object plotting the long pressed location:
+        // pin object plotting the long pressed location
         let pinLocation = PinAnnotated(coordinate: CLLocationCoordinate2D(latitude: mapCoordinate.latitude, longitude: mapCoordinate.longitude))
 
-        // Add pinLocation as an annotation to the map view:
+        // add pinLocation as an annotation to the map view
         mapView.addAnnotation(pinLocation)
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -154,13 +154,28 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
         locationView.addCachedPins()
     }
     
+    func handleFailureAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertVC, animated: true, completion: nil)
+    }
+    
+    func requestTestEcho() {
+        FlickrAPIClient.requestFlickrTestEcho { data, error in
+            guard let data = data else {
+                // notify the admin of any errors
+                print((String(describing: error)))
+                return
+            }
+            print("Here are the results of the Flickr test echo service: \(data)")
+        }
+    }
 }
 
-//MARK: MKMapViewDelegate—
+// MARK: MKMapViewDelegate
 
 extension LocationMapViewController: MKMapViewDelegate {
-    
-    // Saves last state of the map region when mapViewDidChangeVisibleRegion()—
+    // saves last state of the map region when mapViewDidChangeVisibleRegion()
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         let mapRegion = [
             "latitude" : mapView.region.center.latitude,
@@ -171,9 +186,8 @@ extension LocationMapViewController: MKMapViewDelegate {
         UserDefaults.standard.set(mapRegion, forKey: regionKey)
     }
 
-    // Here we create a pin view—
+    // here we create a pin view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
@@ -182,14 +196,14 @@ extension LocationMapViewController: MKMapViewDelegate {
             pinView.annotation = annotation
         } else {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.animatesDrop = true
-            pinView!.pinTintColor = .red
+            pinView!.animatesDrop = false
+            pinView!.pinTintColor = .green
         }
         
         return pinView
     }
     
-    // When a pin is tapped, the app will navigate to the Photo Album view associated with the pin—
+    // when a pin is tapped, the app will navigate to the Photo Album view associated with the pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let coordinate = view.annotation?.coordinate {
             if let PhotoAlbumVC = self.storyboard?.instantiateViewController(withIdentifier: "showPhotoAlbum") as? PhotoAlbumViewController {
@@ -201,12 +215,11 @@ extension LocationMapViewController: MKMapViewDelegate {
             }
         }
     }
-    
 }
 
-// MARK: - TravelLocationsMapViewModelDelegate
+// MARK: TravelLocationsMapViewModelDelegate
+
 extension LocationMapViewController: TravelLocationViewDelegate {
-    
     func pinsInserted() {
         getAnnotations()
     }
@@ -214,5 +227,4 @@ extension LocationMapViewController: TravelLocationViewDelegate {
     func zoomToVisibleArea(region: MKCoordinateRegion) {
         locationMapView.setRegion(region, animated: true)
     }
-    
 }

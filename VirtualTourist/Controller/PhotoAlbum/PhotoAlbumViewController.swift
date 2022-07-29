@@ -10,21 +10,19 @@ import CoreData
 import MapKit
 
 class PhotoAlbumViewController: UIViewController {
-    
-    //MARK: Properties
+    // MARK: Properties
     
     var albumView: PhotoAlbumViewProtocol = PhotoAlbumView()
     let photoCell = AlbumPhotoCell()
 
-    //MARK: Outlets
+    // MARK: Outlets
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIButton!
     @IBOutlet weak var photoAlbumMapView: MKMapView!
     @IBOutlet var backgroundImage: UIImageView!
-    //@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    //MARK: Lifecycle
+    // MARK: Lifecycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -45,7 +43,7 @@ class PhotoAlbumViewController: UIViewController {
         albumView.loadPhotos(albumView.currentPage)
     }
     
-    //MARK: Helper Methods
+    // MARK: Helper Methods
     
     // remove all existing images from current place
     @IBAction func newCollection(_ sender: Any) {
@@ -60,12 +58,10 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     func deleteData(index: Int){
-        // Returns the first element of the sequence that satisfies the given predicate.
+        // returns the first element of the sequence that satisfies the given predicate
         if let photo = albumView.pinSelected?.photos?.first(where: { ($0 as? Photo)?.id == albumView.photos[index].urlString}) as? Photo {
             albumView.pinSelected?.removeFromPhotos(photo)
             albumView.photos.remove(at: index)
-            collectionView.reloadData()
         }
     }
-    
 }

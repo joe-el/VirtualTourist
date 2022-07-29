@@ -10,9 +10,7 @@ import UIKit
 import CoreData
 
 class PhotoAlbumView {
-    
     weak var delegate: PhotoAlbumViewDelegate?
-//    let alertMessage = PhotoAlbumViewController()
     var pinSelected: Pin?
     var photos: [FlickrPhotoModel] = []
     var currentPage = 1
@@ -39,5 +37,4 @@ class PhotoAlbumView {
             print("Download Failed: \(error?.localizedDescription ?? "")")
         }
     }
-    
 }

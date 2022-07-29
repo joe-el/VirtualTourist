@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Root of the entire JSON object—Flickr Search Photo.
+// root of the entire JSON object—Flickr Search Photo.
 struct FlickrPhotos: Codable {
     let photos: Photos
     
@@ -56,5 +56,3 @@ struct FlickrPhotos: Codable {
     }
     let stat: String
 }
-
-

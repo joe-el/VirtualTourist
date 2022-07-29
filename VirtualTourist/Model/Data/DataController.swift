@@ -34,7 +34,7 @@ class DataController {
                 completion?()
             }
         }
-    // Save current context—
+    // save current context
     func save() throws{
         if viewContext.hasChanges{
             try viewContext.save()
@@ -44,7 +44,7 @@ class DataController {
     static let shared = DataController(modelName: "VirtualTourist")
 }
 
-// MARK: - Autosaving
+// MARK: Autosaving
 
 extension DataController {
     
@@ -55,7 +55,7 @@ extension DataController {
             print("cannot set negative autosave interval")
             return
         }
-        // We discard any error, just let the method try again at the next interval—
+        // we discard any error, just let the method try again at the next interval
         if viewContext.hasChanges{
             try? viewContext.save()
         }
@@ -69,35 +69,35 @@ extension DataController {
 extension DataController {
     
     func fetchLocation(_ predicate: NSPredicate, sorting: NSSortDescriptor? = nil) throws-> Pin? {
-        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-        fr.predicate = predicate
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        fetchRequest.predicate = predicate
         if let sorting = sorting {
-            fr.sortDescriptors = [sorting]
+            fetchRequest.sortDescriptors = [sorting]
         }
-        guard let location = (try viewContext.fetch(fr) as! [Pin]).first else {
+        guard let location = (try viewContext.fetch(fetchRequest) as! [Pin]).first else {
             return nil
         }
         return location
     }
     
     func fetchAllLocation() throws-> [Pin]? {
-        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-        guard let pin = try viewContext.fetch(fr) as? [Pin] else {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        guard let pin = try viewContext.fetch(fetchRequest) as? [Pin] else {
             return nil
         }
         return pin
     }
 
     func fetchAllPhoto(_ predicate: NSPredicate? = nil, sorting: NSSortDescriptor? = nil) throws-> [Photo]? {
-            let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
-            fr.predicate = predicate
-            if let sorting = sorting {
-                fr.sortDescriptors = [sorting]
-            }
-            guard let allPhoto = try viewContext.fetch(fr) as? [Photo] else {
-                return nil
-            }
-            return allPhoto
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+        fetchRequest.predicate = predicate
+        if let sorting = sorting {
+            fetchRequest.sortDescriptors = [sorting]
+        }
+        guard let allPhoto = try viewContext.fetch(fetchRequest) as? [Photo] else {
+            return nil
+        }
+        return allPhoto
     }
     
 }

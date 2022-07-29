@@ -17,7 +17,7 @@ extension Pin {
     @NSManaged public var longitude: Double
     @NSManaged public var photos: NSSet?
     
-    // Generated accessors for photos—
+    // generated accessors for photos
     @objc(addPhotosObject:)
     @NSManaged public func addToPhotos(_ value: Photo)
 
@@ -31,5 +31,4 @@ extension Pin {
     @NSManaged public func removeFromPhotos(_ values: NSSet)
     
 }
-
 extension Pin: Identifiable { }

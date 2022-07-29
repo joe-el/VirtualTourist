@@ -12,22 +12,21 @@ import FoundationNetworking
 import UIKit
 
 class FlickrAPIClient {
-    
-    // MARK: - Authentication Properties:
+    // MARK: Authentication Properties
     
     struct Auth {
-        static let secretKey = "46bf11fe18df255c"
-        static let apiKey = "a97f8f34adf1b3ae5bdb30687dca1cd8"
+        static let secretKey = "10e28ca450a42099"
+        static let apiKey = "ed30536af534be32ae6bee3f180ee67f"
     }
     
-    // MARK: - Udacity API URL's:
+    // MARK: Udacity API URL's
     
     enum EndPoints {
-        // Flickr API restURL endpoint—
-        static let testEcho = "https://www.flickr.com/services/rest/?method=flickr.test.echo&name=value"
+        // flickr API restURL endpoint
+        static let testEcho = "https://www.flickr.com/services/rest/?method=flickr.test.echo&name=value&api_key=\(Auth.apiKey)&format=json"
         static let base = "https://api.flickr.com/services/rest/"
         
-        // Flickr API arguments—
+        // flickr API arguments
         static let method = "?method=flickr.photos.search"
         static let apiKey = "&api_key=\(Auth.apiKey)"
         static let format = "&format=json"
@@ -51,15 +50,15 @@ class FlickrAPIClient {
         }
         
         var url: URL {
-            return URL(string: stringValue)! // We'll force unwrap it for now:
+            // we'll force unwrap it for now
+            return URL(string: stringValue)!
         }
     }
     
-    // MARK: - Helper Methods for API Requests:
+    // MARK: Helper Methods for API Requests
     
-    // GETting HTTP Request—
+    // GETting HTTP Request
     class func taskForGETRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completionHandler: @escaping (ResponseType?, Error?) -> Void) {
-        
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -90,7 +89,19 @@ class FlickrAPIClient {
         task.resume()
     }
     
-    // A helper method to get Flickr Images—
+    // request the flickr.test.echo service
+    class func requestFlickrTestEcho(completionHandler: @escaping (TestResponse?, Error?) -> Void) {
+        taskForGETRequest(url: EndPoints.testEchoService.url, responseType: TestResponse.self) { (response, error) in
+            if let response = response {
+                print(response)
+                completionHandler(response, nil)
+            } else {
+                completionHandler(nil, error)
+            }
+        }
+    }
+    
+    // helper methods to get Flickr Images
     class func requestFlickrData(lat: Double, long: Double, pageNum: Int, completionHandler: @escaping (FlickrPhotos?, Error?) -> Void) {
         taskForGETRequest(url: EndPoints.photosSearch(lat, long, pageNum).url, responseType: FlickrPhotos.self) { (response, error) in
             if let response = response {
@@ -136,7 +147,6 @@ class FlickrAPIClient {
         return nil
     }
     
-    // Marked as a class method, weil we don't need an instance of the FlickrAPI in order to use it—
     class func requestSinglePhoto(url: String, completionHandler: @escaping (Data?, Error?) -> Void) {
         if let url = URL(string: url) {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -156,5 +166,4 @@ class FlickrAPIClient {
         pin.addToPhotos(newPhoto)
         try? context.save()
     }
-    
 }

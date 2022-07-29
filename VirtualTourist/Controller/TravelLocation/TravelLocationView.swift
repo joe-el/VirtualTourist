@@ -8,8 +8,6 @@
 import Foundation
 
 class TravelLocationView: NSObject {
-    
     weak var delegate: TravelLocationViewDelegate?
     var pinDrops: [Pin] = []
-    
 }

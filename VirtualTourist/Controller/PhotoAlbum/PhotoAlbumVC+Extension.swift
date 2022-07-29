@@ -9,14 +9,14 @@ import UIKit
 import MapKit
 import CoreData
 
-//MARK: Properties
+// MARK: Properties
+
 let reuseIdent = "Cell"
 var hideCell: Bool = false
 
-//MARK: ColectionView Data Source Methods
+// MARK: ColectionView Data Source Methods
 
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-        
     // numberOfObjects
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return albumView.photos.count
@@ -41,7 +41,6 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
                     cell.setPhotoImageView(for: pin, from: urlString)
                 }
             }
-            
             cell.photoImageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
             cell.photoImageView.layer.borderWidth = 2
             cell.photoImageView.layer.cornerRadius = 3
@@ -53,23 +52,20 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deleteItems(at: [indexPath])
-        
         let ac = UIAlertController(title: "Delete?", message: "Remove photo from the album?", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Delete!" , style: .destructive, handler: { _ in
+            collectionView.deleteItems(at: [indexPath])
             self.deleteData(index: indexPath.row)
             self.collectionView.reloadData()
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
     }
-    
 }
 
 //MARK: MapView Data Source Method
 
 extension PhotoAlbumViewController: MKMapViewDelegate {
-       
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
            let reuseId = "pin"
            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
@@ -88,13 +84,11 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
         
            return pinView
     }
-    
 }
 
 //MARK: Photo Album Delegates
 
 extension PhotoAlbumViewController: PhotoAlbumViewDelegate {
-    
     func showNoCellView(_ haveNoPhotos: Bool) {
         if haveNoPhotos == true {
             hideCell = haveNoPhotos
@@ -128,5 +122,4 @@ extension PhotoAlbumViewController: PhotoAlbumViewDelegate {
             self.collectionView.reloadData()
         }
     }
-    
 }

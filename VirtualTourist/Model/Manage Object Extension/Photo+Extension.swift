@@ -18,5 +18,4 @@ extension Photo {
     @NSManaged public var pin: Pin?
     
 }
-
 extension Photo: Identifiable { }

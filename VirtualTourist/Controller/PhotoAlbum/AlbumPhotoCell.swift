@@ -9,7 +9,6 @@ import UIKit
 import CoreData
 
 class AlbumPhotoCell: UICollectionViewCell {
-    
     static let reuseIdentifier = "PhotoImageViewCell"
    
     @IBOutlet weak var photoImageView: UIImageView! {
@@ -22,12 +21,11 @@ class AlbumPhotoCell: UICollectionViewCell {
         FlickrAPIClient.grabPhoto(pin: pin, urlPath: urlString) { data, error in
             DispatchQueue.main.async {
                 guard let data = data else {
-                    print("Why photo wasn't set? \(String(describing: error))")
+                    print(error?.localizedDescription ?? "Unable to Download")
                     return
                 }
                 self.photoImageView.image = UIImage(data: data)
             }
         }
     }
-    
 }

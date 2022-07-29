@@ -51,7 +51,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZA1-MU-ye9">
-                                <rect key="frame" x="0.0" y="329" width="414" height="494"/>
+                                <rect key="frame" x="0.0" y="285" width="414" height="538"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="5" id="mUw-2M-ZkF">
                                     <size key="itemSize" width="120" height="120"/>
@@ -61,7 +61,7 @@
                                     <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <imageView key="backgroundView" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="yDH-hH-ykv">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="494"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="538"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <cells>
@@ -85,12 +85,6 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qem-se-sSM">
-                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                                <items>
-                                    <navigationItem title="Photo Album" id="1PA-sE-XWD"/>
-                                </items>
-                            </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F05-Uj-OcV">
                                 <rect key="frame" x="20" y="831" width="374" height="31"/>
                                 <state key="normal" title="Button"/>
@@ -102,7 +96,7 @@
                                 </connections>
                             </button>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ceP-c1-HET">
-                                <rect key="frame" x="0.0" y="88" width="414" height="233"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="233"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="233" id="jmX-lb-7mt"/>
                                 </constraints>
@@ -116,14 +110,11 @@
                             <constraint firstItem="ZA1-MU-ye9" firstAttribute="trailing" secondItem="uPo-JW-iB9" secondAttribute="trailing" id="7Vt-vK-EGS"/>
                             <constraint firstItem="F05-Uj-OcV" firstAttribute="top" secondItem="ZA1-MU-ye9" secondAttribute="bottom" constant="8" id="LZz-si-ktF"/>
                             <constraint firstItem="ceP-c1-HET" firstAttribute="trailing" secondItem="uPo-JW-iB9" secondAttribute="trailing" id="XbB-7Z-rUN"/>
-                            <constraint firstItem="ceP-c1-HET" firstAttribute="top" secondItem="Qem-se-sSM" secondAttribute="bottom" id="ZxU-MY-Kw1"/>
                             <constraint firstItem="uPo-JW-iB9" firstAttribute="trailing" secondItem="F05-Uj-OcV" secondAttribute="trailing" constant="20" id="bAB-Sy-CTR"/>
                             <constraint firstItem="ZA1-MU-ye9" firstAttribute="top" secondItem="ceP-c1-HET" secondAttribute="bottom" constant="8" id="jQY-aH-EvP"/>
                             <constraint firstItem="F05-Uj-OcV" firstAttribute="bottom" secondItem="uPo-JW-iB9" secondAttribute="bottom" id="nMT-ZX-L8O"/>
-                            <constraint firstItem="ceP-c1-HET" firstAttribute="top" secondItem="uPo-JW-iB9" secondAttribute="top" constant="44" id="rfG-kB-F6g"/>
+                            <constraint firstItem="ceP-c1-HET" firstAttribute="top" secondItem="uPo-JW-iB9" secondAttribute="top" id="rfG-kB-F6g"/>
                             <constraint firstItem="ceP-c1-HET" firstAttribute="leading" secondItem="uPo-JW-iB9" secondAttribute="leading" id="wX1-yM-miV"/>
-                            <constraint firstItem="ceP-c1-HET" firstAttribute="trailing" secondItem="Qem-se-sSM" secondAttribute="trailing" id="yRm-hW-nZh"/>
-                            <constraint firstItem="ceP-c1-HET" firstAttribute="leading" secondItem="Qem-se-sSM" secondAttribute="leading" id="zJF-do-rgb"/>
                         </constraints>
                     </view>
                     <connections>

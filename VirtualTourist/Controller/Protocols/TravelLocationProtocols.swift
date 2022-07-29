@@ -21,7 +21,6 @@ protocol TravelLocationViewProtocol {
 }
 
 extension TravelLocationView: TravelLocationViewProtocol {
-    
     func centerToLocation(location: CLLocationCoordinate2D, span: MKCoordinateSpan) {
         let coordinateRegion = MKCoordinateRegion(center: location, span: span)
         self.delegate?.zoomToVisibleArea(region: coordinateRegion)
@@ -39,5 +38,4 @@ extension TravelLocationView: TravelLocationViewProtocol {
             delegate?.pinsInserted()
         }
     }
-    
 }
