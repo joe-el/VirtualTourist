@@ -12,12 +12,13 @@ import MapKit
 class PhotoAlbumViewController: UIViewController {
     // MARK: Properties
     
+    var fetchedResultsController: NSFetchedResultsController<Photo>!
     var albumView: PhotoAlbumViewProtocol = PhotoAlbumView()
     let photoCell = AlbumPhotoCell()
 
     // MARK: Outlets
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var albumCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIButton!
     @IBOutlet weak var photoAlbumMapView: MKMapView!
     @IBOutlet var backgroundImage: UIImageView!
@@ -35,9 +36,8 @@ class PhotoAlbumViewController: UIViewController {
         backgroundImage.isHidden = true
         backgroundImage.alpha = 0
 
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        photoAlbumMapView.delegate = self
+        albumCollectionView.delegate = self
+        albumCollectionView.dataSource = self
         albumView.delegate = self
         albumView.pinMaterialize()
         albumView.loadPhotos(albumView.currentPage)
@@ -45,8 +45,9 @@ class PhotoAlbumViewController: UIViewController {
     
     // MARK: Helper Methods
     
-    // remove all existing images from current place
+    // remove all existing images from current collection view and then download new photos
     @IBAction func newCollection(_ sender: Any) {
+        albumView.deleteAllPhotos(from: albumView.pinSelected)
         albumView.getMorePhotos()
     }
 
@@ -59,9 +60,16 @@ class PhotoAlbumViewController: UIViewController {
     
     func deleteData(index: Int){
         // returns the first element of the sequence that satisfies the given predicate
-        if let photo = albumView.pinSelected?.photos?.first(where: { ($0 as? Photo)?.id == albumView.photos[index].urlString}) as? Photo {
-            albumView.pinSelected?.removeFromPhotos(photo)
+        if let photoToRemove = albumView.pinSelected?.photos?.first(where: { ($0 as? Photo)?.id == albumView.photos[index].urlString}) as? Photo {
+            
+            // here the selected photo data is deleted from Core Data
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            let context = appDelegate.persistentContainer.viewContext
+            
+            albumView.pinSelected?.removeFromPhotos(photoToRemove)
             albumView.photos.remove(at: index)
+            context.delete(photoToRemove)
+            try? context.save()
         }
     }
 }

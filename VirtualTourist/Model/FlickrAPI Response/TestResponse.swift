@@ -7,49 +7,36 @@
 
 import Foundation
 
-struct FormatContent: Codable {
-    let formatContent: String
-    
-    enum CodingKeys: String, CodingKey {
-        case formatContent = "_content"
+struct TestEchoService: Codable {
+    struct Method: Codable {
+        let methodContent: String
+        
+        enum CodingKeys: String, CodingKey {
+            case methodContent = "_content"
+        }
     }
-}
-
-struct ApiContent: Codable {
-    let apiContent: String
-    
-    enum CodingKeys: String, CodingKey {
-        case apiContent = "_content"
+    struct ApiKey: Codable {
+        let apiKeyContent: String
+        
+        enum CodingKeys: String, CodingKey {
+            case apiKeyContent = "_content"
+        }
     }
-}
-
-struct NameContent: Codable {
-    let nameContent: String
-    
-    enum CodingKeys: String, CodingKey {
-        case nameContent = "_content"
+    struct Format: Codable {
+        let formatContent: String
+        
+        enum CodingKeys: String, CodingKey {
+            case formatContent = "_content"
+        }
     }
-}
-
-struct MethodContent: Codable {
-    let methodContent: String
     
-    enum CodingKeys: String, CodingKey {
-        case methodContent = "_content"
-    }
-}
-
-// root object
-struct TestResponse: Codable {
-    let method: MethodContent
-    let name: NameContent
-    let apiKey: ApiContent
-    let format: FormatContent
+    let method: Method
+    let apiKey: ApiKey
+    let format: Format
     let stat: String
     
     enum CodingKeys: String, CodingKey {
         case method
-        case name
         case apiKey = "api_key"
         case format
         case stat

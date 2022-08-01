@@ -23,7 +23,7 @@ class FlickrAPIClient {
     
     enum EndPoints {
         // flickr API restURL endpoint
-        static let testEcho = "https://www.flickr.com/services/rest/?method=flickr.test.echo&name=value&api_key=\(Auth.apiKey)&format=json"
+        static let testEcho = "https://www.flickr.com/services/rest/?method=flickr.test.echo&api_key=\(Auth.apiKey)&format=json"
         static let base = "https://api.flickr.com/services/rest/"
         
         // flickr API arguments
@@ -66,7 +66,6 @@ class FlickrAPIClient {
                 }
                 return
             }
-           
             let decoder = JSONDecoder()
             do {
                 let responseObject = try decoder.decode(responseType.self, from: data)
@@ -90,8 +89,8 @@ class FlickrAPIClient {
     }
     
     // request the flickr.test.echo service
-    class func requestFlickrTestEcho(completionHandler: @escaping (TestResponse?, Error?) -> Void) {
-        taskForGETRequest(url: EndPoints.testEchoService.url, responseType: TestResponse.self) { (response, error) in
+    class func requestFlickrTestEcho(completionHandler: @escaping ([TestEchoService]?, Error?) -> Void) {
+        taskForGETRequest(url: EndPoints.testEchoService.url, responseType: [TestEchoService].self) { (response, error) in
             if let response = response {
                 print(response)
                 completionHandler(response, nil)

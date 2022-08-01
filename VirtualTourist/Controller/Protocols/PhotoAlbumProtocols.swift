@@ -24,6 +24,7 @@ protocol PhotoAlbumViewProtocol {
     func loadPhotos(_ pageNumber: Int)
     func pinMaterialize()
     func getMorePhotos()
+    func deleteAllPhotos(from photosOnPin: Pin?)
 }
 
 extension PhotoAlbumView: PhotoAlbumViewProtocol{
@@ -54,6 +55,26 @@ extension PhotoAlbumView: PhotoAlbumViewProtocol{
                 delegate?.loadedPhotos()
             } else {
                 downloadPhotoData(pageNumber)
+            }
+        }
+    }
+    
+    func deleteAllPhotos(from photosOnPin: Pin?) {
+        guard  let pinSelected = photosOnPin  else {
+            return
+        }
+        
+        if let photosFromPin = pinSelected.photos?.allObjects as? [Photo] {
+            if !photosFromPin.isEmpty {
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                let context = appDelegate.persistentContainer.viewContext
+                
+                for object in photosFromPin {
+                    context.delete(object)
+                }
+                try? context.save() 
+                
+                delegate?.loadedPhotos()
             }
         }
     }

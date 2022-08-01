@@ -32,11 +32,10 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // get users current location
         manager.requestAlwaysAuthorization()
         manager.delegate = self
         
-        locationMapView.delegate = self
-        locationMapView.delegate = self
         locationView.delegate = self
         locationView.addCachedPins()
     
@@ -164,10 +163,11 @@ class LocationMapViewController: UIViewController, CLLocationManagerDelegate {
         FlickrAPIClient.requestFlickrTestEcho { data, error in
             guard let data = data else {
                 // notify the admin of any errors
-                print((String(describing: error)))
+                print((String(describing: error?.localizedDescription)))
+//                handleFailureAlert(title: "Test Echo", message: error?.localizedDescription ?? "Error With Test Echo")
                 return
             }
-            print("Here are the results of the Flickr test echo service: \(data)")
+            print("Here are the results of the Flickr test echo service: \(data[0])")
         }
     }
 }

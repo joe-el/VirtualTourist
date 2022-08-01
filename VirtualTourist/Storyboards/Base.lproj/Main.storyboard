@@ -100,6 +100,9 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="233" id="jmX-lb-7mt"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="RuB-Zt-UpB" id="Yb8-1Y-aGx"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uPo-JW-iB9"/>
@@ -118,8 +121,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="albumCollectionView" destination="ZA1-MU-ye9" id="t3z-My-gnB"/>
                         <outlet property="backgroundImage" destination="yDH-hH-ykv" id="oSQ-RL-PZ6"/>
-                        <outlet property="collectionView" destination="ZA1-MU-ye9" id="O8O-Ui-09j"/>
                         <outlet property="newCollectionButton" destination="F05-Uj-OcV" id="jCq-3o-J5h"/>
                         <outlet property="photoAlbumMapView" destination="ceP-c1-HET" id="dQ7-7N-mBH"/>
                         <outlet property="view" destination="ceP-c1-HET" id="AQv-cH-KEH"/>

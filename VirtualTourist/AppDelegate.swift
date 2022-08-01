@@ -10,12 +10,16 @@ import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     // MARK: UISceneSession Lifecycle
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // override point for customization after application launch
+        
         checkIfFirstLaunch()
+            
+        // file location for VirtualTourist sqlite model
+        print("Documents Directory: ", FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).last ?? "Not Found!")
         
         return true
     }

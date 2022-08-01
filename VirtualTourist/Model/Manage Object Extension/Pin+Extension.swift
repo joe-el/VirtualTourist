@@ -6,9 +6,9 @@
 //
 
 import CoreData
+import Foundation
 
 extension Pin {
-    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Pin> {
         return NSFetchRequest<Pin>(entityName: "Pin")
     }
@@ -16,7 +16,9 @@ extension Pin {
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var photos: NSSet?
-    
+}
+
+extension Pin {
     // generated accessors for photos
     @objc(addPhotosObject:)
     @NSManaged public func addToPhotos(_ value: Photo)
@@ -29,6 +31,13 @@ extension Pin {
 
     @objc(removePhotos:)
     @NSManaged public func removeFromPhotos(_ values: NSSet)
-    
 }
+
 extension Pin: Identifiable { }
+
+//extension Pin {
+//    public override func awakeFromInsert() {
+//        super.awakeFromInsert()
+//        creationDate = Date()
+//    }
+//}

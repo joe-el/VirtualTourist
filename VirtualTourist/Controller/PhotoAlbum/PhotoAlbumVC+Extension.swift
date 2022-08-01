@@ -14,6 +14,29 @@ import CoreData
 let reuseIdent = "Cell"
 var hideCell: Bool = false
 
+//MARK: MapView Data Source Method
+
+extension PhotoAlbumViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+           let reuseId = "pin"
+           var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+
+           if pinView == nil {
+               pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+               pinView!.canShowCallout = false
+               pinView!.pinTintColor = .red
+            
+           } else {
+               pinView!.annotation = annotation
+           }
+           
+           pinView?.isSelected = true
+           pinView?.isUserInteractionEnabled = false
+        
+           return pinView
+    }
+}
+
 // MARK: ColectionView Data Source Methods
 
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -27,7 +50,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
             // we failed to get a AlbumPhotoCell – bail out!
             fatalError("Unable to dequeue Photo Album View Cell.")
         }
-        
+       
         // if there are no photos to download then hide the cell
         if hideCell {
             cell.isHidden = true
@@ -56,33 +79,10 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         ac.addAction(UIAlertAction(title: "Delete!" , style: .destructive, handler: { _ in
             collectionView.deleteItems(at: [indexPath])
             self.deleteData(index: indexPath.row)
-            self.collectionView.reloadData()
+            self.albumCollectionView.reloadData()
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
-    }
-}
-
-//MARK: MapView Data Source Method
-
-extension PhotoAlbumViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-           let reuseId = "pin"
-           var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-
-           if pinView == nil {
-               pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-               pinView!.canShowCallout = false
-               pinView!.pinTintColor = .red
-            
-           } else {
-               pinView!.annotation = annotation
-           }
-           
-           pinView?.isSelected = true
-           pinView?.isUserInteractionEnabled = false
-        
-           return pinView
     }
 }
 
@@ -113,13 +113,13 @@ extension PhotoAlbumViewController: PhotoAlbumViewDelegate {
     
     func loadedPhotos() {
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.albumCollectionView.reloadData()
         }
     }
     
     func loadMorePhotos() {
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.albumCollectionView.reloadData()
         }
     }
 }
