@@ -29,9 +29,11 @@ protocol PhotoAlbumViewProtocol {
 
 extension PhotoAlbumView: PhotoAlbumViewProtocol{
     func getMorePhotos(){
-        currentPage = Int.random(in: 1...10)
-        downloadPhotoData(currentPage)
-        delegate?.loadMorePhotos()
+        if currentPage <= 100 {
+            currentPage = Int.random(in: 1...10)
+            downloadPhotoData(currentPage)
+            delegate?.loadMorePhotos()
+        }
     }
     
     func pinMaterialize(){

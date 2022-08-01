@@ -196,7 +196,7 @@ extension LocationMapViewController: MKMapViewDelegate {
             pinView.annotation = annotation
         } else {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.animatesDrop = false
+            pinView!.animatesDrop = true
             pinView!.pinTintColor = .green
         }
         
