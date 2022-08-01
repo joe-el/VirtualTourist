@@ -92,7 +92,7 @@ class FlickrAPIClient {
     class func requestFlickrTestEcho(completionHandler: @escaping ([TestEchoService]?, Error?) -> Void) {
         taskForGETRequest(url: EndPoints.testEchoService.url, responseType: [TestEchoService].self) { (response, error) in
             if let response = response {
-                print(response)
+               debugPrint(response)
                 completionHandler(response, nil)
             } else {
                 completionHandler(nil, error)
